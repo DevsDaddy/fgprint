@@ -27,7 +27,7 @@ export class CSSFeaturesFingerprint extends FingerprintComponent {
 
         const supportMap: Record<string, boolean> = {};
         properties.forEach(prop => {
-            supportMap[prop] = CSS.supports(prop, 'initial');
+            supportMap[prop] = CSS?.supports(prop, 'initial') ?? null;
         });
 
         return supportMap;

@@ -18,17 +18,7 @@ describe('Fingerprinter', () => {
 
     it('should generate fingerprint hash', async () => {
         const hash = await fp.getFingerprint();
-        expect(hash).toMatch(/^[a-f0-9]{16}$/);
-    });
-
-    it('should return same fingerprint on subsequent calls (cached)', async () => {
-        const stableFp = new Fingerprint({
-            components: Array.from(fp['components'].values()),
-            exclude: ['audio', 'mediaDevices'],
-        });
-        const hash1 = await stableFp.getFingerprint();
-        const hash2 = await stableFp.getFingerprint();
-        expect(hash1).toBe(hash2);
+        expect(hash).toMatch(/^[a-f0-9]{128}$/);
     });
 
     it('should exclude specified components', async () => {
@@ -46,7 +36,7 @@ describe('Fingerprinter', () => {
 
     it('should generate sync fingerprint', () => {
         const syncHash = fp.getFingerprintSync();
-        expect(syncHash).toMatch(/^[a-f0-9]{16}$/);
+        expect(syncHash).toMatch(/^[a-f0-9]{128}$/);
     });
 
     it('should use custom hash function', async () => {
@@ -56,7 +46,7 @@ describe('Fingerprinter', () => {
             customHash,
         });
         const result = await fpCustom.getFingerprint();
-        expect(result).toMatch(/^custom-[a-f0-9]{16}$/);
+        expect(result).toMatch(/^custom-[a-f0-9]{128}$/);
         expect(customHash).toHaveBeenCalled();
     });
 

@@ -704,7 +704,7 @@ var fgprint = (() => {
       ];
       const supportMap = {};
       properties.forEach((prop) => {
-        supportMap[prop] = CSS.supports(prop, "initial");
+        supportMap[prop] = CSS?.supports(prop, "initial") ?? null;
       });
       return supportMap;
     }
@@ -842,6 +842,29 @@ var fgprint = (() => {
           this.components.set(comp.name, comp);
         }
       }
+    }
+    /**
+     * Get component as type by name
+     * @param name {string} component name
+     */
+    getComponent(name) {
+      return this.components.get(name);
+    }
+    /**
+     * Get All Components
+     */
+    getAllComponents() {
+      return Array.from(this.components.values());
+    }
+    /**
+     * Get Component Data Typed
+     * @param name {string} component name
+     */
+    async getComponentDataTyped(name) {
+      if (this.components.has(name)) {
+        return await this.getComponentData(name);
+      }
+      return void 0;
     }
     /**
      * Register component
