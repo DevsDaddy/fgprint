@@ -24,6 +24,7 @@ import {NetworkFingerprint} from "../components/network";
 import {MathPrecisionFingerprint} from "../components/math";
 import {SpeechSynthesisFingerprint} from "../components/speechsynth";
 import {CSSFeaturesFingerprint} from "../components/css";
+import {GamepadFingerprint} from "../components/gamepad";
 
 /**
  * Fingerprint Options
@@ -193,7 +194,8 @@ export class Fingerprint {
                 new NetworkFingerprint(),
                 new MathPrecisionFingerprint(),
                 new SpeechSynthesisFingerprint(),
-                new CSSFeaturesFingerprint()
+                new CSSFeaturesFingerprint(),
+                new GamepadFingerprint()
             ]
         })
     }

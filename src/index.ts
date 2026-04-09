@@ -33,3 +33,4 @@ export * from "./components/mediadevices";
 export * from "./components/network";
 export * from "./components/speechsynth";
 export * from "./components/webgpu";
+export * from "./components/gamepad";

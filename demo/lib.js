@@ -27,6 +27,7 @@ var fgprint = (() => {
     Fingerprint: () => Fingerprint,
     FingerprintComponent: () => FingerprintComponent,
     FontsFingerprint: () => FontsFingerprint,
+    GamepadFingerprint: () => GamepadFingerprint,
     HashUtil: () => HashUtil,
     Helpers: () => Helpers,
     MathPrecisionFingerprint: () => MathPrecisionFingerprint,
@@ -565,6 +566,27 @@ var fgprint = (() => {
     }
   };
 
+  // src/components/gamepad.ts
+  var GamepadFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "gamepad";
+    }
+    getData() {
+      if (!("getGamepads" in navigator)) return { supported: false };
+      const gamepads = navigator.getGamepads();
+      const info = [];
+      for (const gp of gamepads) {
+        if (gp) info.push(`${gp.id}::${gp.mapping}`);
+      }
+      return {
+        supported: true,
+        count: info.length,
+        list: info.join("|")
+      };
+    }
+  };
+
   // src/core/fingerprint.ts
   var DEFAULT_TIMEOUT = 2e3;
   var Fingerprint = class _Fingerprint {
@@ -701,7 +723,8 @@ var fgprint = (() => {
           new NetworkFingerprint(),
           new MathPrecisionFingerprint(),
           new SpeechSynthesisFingerprint(),
-          new CSSFeaturesFingerprint()
+          new CSSFeaturesFingerprint(),
+          new GamepadFingerprint()
         ]
       });
     }
