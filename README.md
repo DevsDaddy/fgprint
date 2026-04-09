@@ -12,10 +12,6 @@
 
 ---
 
-## 📖 Table of contents
-
----
-
 ## 🚀 Why fgprint?
 Most fingerprinting libraries are either outdated, use a limited set of signals, or have bloated dependencies. **Fgprint** was built from the ground up to be:
 - **Full-featured**: collects **over 30 stable** and unique signals, including WebGPU, WebCodecs, Canvas, AudioContext, WebGL, fonts, math artifacts, and many others.
