@@ -22,18 +22,25 @@ var fgprint = (() => {
   var index_exports = {};
   __export(index_exports, {
     AudioFingerprint: () => AudioFingerprint,
+    CSSFeaturesFingerprint: () => CSSFeaturesFingerprint,
     CanvasFingerprint: () => CanvasFingerprint,
     Fingerprint: () => Fingerprint,
     FingerprintComponent: () => FingerprintComponent,
     FontsFingerprint: () => FontsFingerprint,
     HashUtil: () => HashUtil,
     Helpers: () => Helpers,
+    MathPrecisionFingerprint: () => MathPrecisionFingerprint,
+    MediaDevicesFingerprint: () => MediaDevicesFingerprint,
     MiscFingerprint: () => MiscFingerprint,
     NavigatorFingerprint: () => NavigatorFingerprint,
+    NetworkFingerprint: () => NetworkFingerprint,
+    PerformanceFingerprint: () => PerformanceFingerprint,
     PluginsFingerprint: () => PluginsFingerprint,
     ScreenFingerprint: () => ScreenFingerprint,
+    SpeechSynthesisFingerprint: () => SpeechSynthesisFingerprint,
     TimezoneFingerprint: () => TimezoneFingerprint,
-    WebGLFingerprint: () => WebGLFingerprint
+    WebGLFingerprint: () => WebGLFingerprint,
+    WebGPUFingerprint: () => WebGPUFingerprint
   });
 
   // src/utils/hash.ts
@@ -405,6 +412,159 @@ var fgprint = (() => {
     }
   };
 
+  // src/components/performance.ts
+  var PerformanceFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "performance";
+    }
+    getData() {
+      return {
+        jsHeapSizeLimit: performance.memory?.jsHeapSizeLimit ?? null,
+        totalJSHeapSize: performance.memory?.totalJSHeapSize ?? null,
+        usedJSHeapSize: performance.memory?.usedJSHeapSize ?? null,
+        mathLoopSpeed: this.measureMathSpeed()
+      };
+    }
+    measureMathSpeed() {
+      const start = performance.now();
+      for (let i = 0; i < 1e5; i++) {
+        Math.sqrt(Math.random());
+      }
+      return performance.now() - start;
+    }
+  };
+
+  // src/components/webgpu.ts
+  var WebGPUFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "webgpu";
+    }
+    /**
+     * WebGPU Version
+     */
+    async getData() {
+      if (!("gpu" in navigator)) return { supported: false };
+      try {
+        const adapter = await navigator.gpu.requestAdapter();
+        if (!adapter) return { supported: true, adapter: null };
+        const info = await adapter.requestAdapterInfo();
+        return {
+          supported: true,
+          vendor: info.vendor,
+          architecture: info.architecture,
+          device: info.device,
+          description: info.description,
+          limits: {
+            maxTextureDimension2D: adapter.limits.maxTextureDimension2D,
+            maxBufferSize: adapter.limits.maxBufferSize,
+            maxComputeWorkgroupSizeX: adapter.limits.maxComputeWorkgroupSizeX
+          },
+          features: Array.from(adapter.features).sort()
+        };
+      } catch {
+        return { supported: true, error: "Unable to retrieve WebGPU info" };
+      }
+    }
+  };
+
+  // src/components/network.ts
+  var NetworkFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "network";
+    }
+    getData() {
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if (!conn) return { supported: false };
+      return {
+        supported: true,
+        effectiveType: conn.effectiveType,
+        rtt: conn.rtt,
+        downlink: conn.downlink,
+        saveData: conn.saveData,
+        type: conn.type
+      };
+    }
+  };
+
+  // src/components/math.ts
+  var MathPrecisionFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "mathPrecision";
+    }
+    getData() {
+      return {
+        tanMinus1e16: Math.tan(-1e16),
+        cos1e20: Math.cos(1e20),
+        sin1e30: Math.sin(1e30),
+        atan2Zero: Math.atan2(0, -0),
+        powSpecial: Math.pow(0.9999999999999999, 1e20)
+      };
+    }
+  };
+
+  // src/components/speechsynth.ts
+  var SpeechSynthesisFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "speechSynthesis";
+    }
+    getData() {
+      if (!("speechSynthesis" in window)) return { supported: false };
+      const voices = window.speechSynthesis.getVoices();
+      return {
+        supported: true,
+        count: voices.length,
+        voices: voices.map((v) => `${v.name} (${v.lang}) ${v.default ? "[default]" : ""}`).join("|")
+      };
+    }
+  };
+
+  // src/components/css.ts
+  var CSSFeaturesFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "cssFeatures";
+    }
+    getData() {
+      const properties = [
+        "display",
+        "grid",
+        "flex",
+        "subgrid",
+        "gap",
+        "container-type",
+        "container",
+        "container-query",
+        "color",
+        "lab()",
+        "lch()",
+        "oklab()",
+        "color-mix",
+        "accent-color",
+        "color-scheme",
+        "backdrop-filter",
+        "animation-timeline",
+        "view-timeline",
+        "scroll-timeline",
+        "offset-path",
+        "offset-distance",
+        "offset-rotate",
+        "font-palette",
+        "font-variant-alternates",
+        "size-adjust"
+      ];
+      const supportMap = {};
+      properties.forEach((prop) => {
+        supportMap[prop] = CSS.supports(prop, "initial");
+      });
+      return supportMap;
+    }
+  };
+
   // src/core/fingerprint.ts
   var DEFAULT_TIMEOUT = 2e3;
   var Fingerprint = class _Fingerprint {
@@ -485,6 +645,22 @@ var fgprint = (() => {
       return this.options.asyncHash ? await HashUtil.hashAsync(serialized) : HashUtil.hashSync(serialized);
     }
     /**
+     * Create Basic Fingerprint
+     */
+    static createBasic() {
+      return new _Fingerprint({
+        components: [
+          new AudioFingerprint(),
+          new CanvasFingerprint(),
+          new FontsFingerprint(),
+          new NavigatorFingerprint(),
+          new PluginsFingerprint(),
+          new ScreenFingerprint(),
+          new WebGPUFingerprint()
+        ]
+      });
+    }
+    /**
      * Create Default Fingerprint
      */
     static createDefault() {
@@ -498,7 +674,34 @@ var fgprint = (() => {
           new ScreenFingerprint(),
           new TimezoneFingerprint(),
           new WebGLFingerprint(),
-          new MiscFingerprint()
+          new MiscFingerprint(),
+          new WebGPUFingerprint(),
+          new MathPrecisionFingerprint(),
+          new CSSFeaturesFingerprint()
+        ]
+      });
+    }
+    /**
+     * Create Full Fingerprint
+     */
+    static createFull() {
+      return new _Fingerprint({
+        components: [
+          new AudioFingerprint(),
+          new CanvasFingerprint(),
+          new FontsFingerprint(),
+          new NavigatorFingerprint(),
+          new PluginsFingerprint(),
+          new ScreenFingerprint(),
+          new TimezoneFingerprint(),
+          new WebGLFingerprint(),
+          new MiscFingerprint(),
+          new PerformanceFingerprint(),
+          new WebGPUFingerprint(),
+          new NetworkFingerprint(),
+          new MathPrecisionFingerprint(),
+          new SpeechSynthesisFingerprint(),
+          new CSSFeaturesFingerprint()
         ]
       });
     }
@@ -545,6 +748,28 @@ var fgprint = (() => {
           }
         );
       });
+    }
+  };
+
+  // src/components/mediadevices.ts
+  var MediaDevicesFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "mediaDevices";
+    }
+    async getData() {
+      if (!navigator.mediaDevices?.enumerateDevices) return {};
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        return {
+          audioInputs: devices.filter((d) => d.kind === "audioinput").map((d) => d.label).join("|"),
+          audioOutputs: devices.filter((d) => d.kind === "audiooutput").map((d) => d.label).join("|"),
+          videoInputs: devices.filter((d) => d.kind === "videoinput").map((d) => d.label).join("|"),
+          deviceIds: devices.map((d) => d.deviceId).join("|")
+        };
+      } catch {
+        return {};
+      }
     }
   };
   return __toCommonJS(index_exports);

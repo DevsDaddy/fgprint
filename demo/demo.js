@@ -5,10 +5,7 @@
         return;
     }
 
-    // Создаём экземпляр с полным набором компонентов
-    const fp = lib.Fingerprint.createDefault();
-
-    // DOM элементы
+    const fp = lib.Fingerprint.createFull();
     const hashEl = document.getElementById('fingerprintHash');
     const syncHashEl = document.getElementById('syncHash');
     const componentsGrid = document.getElementById('componentsGrid');
@@ -18,7 +15,6 @@
     const rawSection = document.getElementById('rawDataSection');
     const rawPre = document.getElementById('rawData');
 
-    // Иконки для компонентов (просто для красоты)
     const componentIcons = {
         navigator: '🌐',
         screen: '🖥️',
@@ -32,15 +28,12 @@
         misc: '🔧'
     };
 
-    // Функция для отображения данных компонента
     function renderComponentData(name, data) {
-        const displayValue = typeof data === 'object'
+        return typeof data === 'object'
             ? JSON.stringify(data, null, 2)
             : String(data);
-        return displayValue;
     }
 
-    // Обновление UI
     async function refreshUI() {
         hashEl.textContent = 'Calculating...';
         syncHashEl.textContent = 'Calculating...';
@@ -48,7 +41,7 @@
 
         const debugMode = debugCheckbox.checked;
 
-        const currentFp = lib.Fingerprint.createDefault();
+        const currentFp = lib.Fingerprint.createFull();
         const fpWithOptions = new lib.Fingerprint({
             components: Array.from(currentFp.components.values()),
             debug: debugMode,
