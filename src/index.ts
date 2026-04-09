@@ -26,3 +26,4 @@ export * from "./components/webgl";
 export * from "./components/timezone";
 export * from "./components/misc";
 export * from "./components/plugins";
+export * from "./components/performance";

@@ -18,6 +18,7 @@ import {ScreenFingerprint} from "../components/screen";
 import {TimezoneFingerprint} from "../components/timezone";
 import {WebGLFingerprint} from "../components/webgl";
 import {MiscFingerprint} from "../components/misc";
+import {PerformanceFingerprint} from "../components/performance";
 
 /**
  * Fingerprint Options
@@ -145,6 +146,24 @@ export class Fingerprint {
                 new MiscFingerprint()
             ]
         });
+    }
+
+    public static createFull(): Fingerprint {
+        return new Fingerprint({
+            components: [
+                new AudioFingerprint(),
+                new CanvasFingerprint(),
+                new FontsFingerprint(),
+                new NavigatorFingerprint(),
+                new PluginsFingerprint(),
+                new ScreenFingerprint(),
+                new TimezoneFingerprint(),
+                new WebGLFingerprint(),
+                new MiscFingerprint(),
+                new PerformanceFingerprint(),
+                
+            ]
+        })
     }
 
     /**
