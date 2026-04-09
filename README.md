@@ -1,8 +1,8 @@
 # Welcome to **fgprint** - an advanced fingerprinting library
 ![Advanced Fingerprinting - fgprint](img/cover.png)
 
-[![fgprint library on NPM](https://img.shields.io/npm/v/fgprint)](https://www.npmjs.com/package/fgprint)
-[![fgprint license](https://img.shields.io/npm/l/fgprint)](./LICENSE)
+[![fgprint library on NPM](https://img.shields.io/npm/v/@neurosell/fgprint)](https://www.npmjs.com/package/@neurosell/fgprint)
+[![fgprint license](https://img.shields.io/npm/l/@neurosell/fgprint)](./LICENSE)
 
 **fgprint** - The most powerful, fast, and convenient library for browser and device fingerprinting in pure TypeScript.
 
@@ -69,7 +69,7 @@ Most fingerprinting libraries are either outdated, use a limited set of signals,
 ### 📦 Installation
 **Installation using NPM:**
 ```bash
-npm install fgprint
+npm install @neurosell/fgprint
 ```
 
 **Or using GitHub:**
@@ -80,7 +80,7 @@ cd ./fgprint
 
 ### 🏁 Simple usage
 ```typescript
-import { Fingerprint } from "fgprint";
+import { Fingerprint } from "@neurosell/fgprint";
 
 /* Create basic fingerprint */
 const fp = Fingerprint.createDefault();
@@ -91,7 +91,7 @@ console.log('Full fingerprint:', fingerprint);
 ### 🔧 Advanced usage
 **Components selection:**
 ```typescript
-import { Fingerprint, NavigatorFingerprint, CanvasFingerprint } from 'fgprint';
+import { Fingerprint, NavigatorFingerprint, CanvasFingerprint } from '@neurosell/fgprint';
 
 const fp = new Fingerprint({
   components: [
@@ -122,7 +122,7 @@ console.log(navData?.userAgent);
 
 **Create your own signals:**
 ```typescript
-import { FingerprintComponent } from 'fgprint';
+import { FingerprintComponent } from '@neurosell/fgprint';
 
 class MyComponent extends FingerprintComponent<string> {
   name = 'myComponent';

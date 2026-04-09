@@ -1,5 +1,5 @@
 {
-  "name": "fgprint",
+  "name": "@neurosell/fgprint",
   "version": "1.0.0",
   "description": "fgprint - powerful library for fast and stable user fingerprinting based on a variety of parameters, written in TypeScript.",
   "keywords": [
