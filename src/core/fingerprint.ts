@@ -19,6 +19,7 @@ import {TimezoneFingerprint} from "../components/timezone";
 import {WebGLFingerprint} from "../components/webgl";
 import {MiscFingerprint} from "../components/misc";
 import {PerformanceFingerprint} from "../components/performance";
+import {WebGPUFingerprint} from "../components/webgpu";
 
 /**
  * Fingerprint Options
@@ -161,7 +162,7 @@ export class Fingerprint {
                 new WebGLFingerprint(),
                 new MiscFingerprint(),
                 new PerformanceFingerprint(),
-                
+                new WebGPUFingerprint()
             ]
         })
     }
