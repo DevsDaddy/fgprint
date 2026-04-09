@@ -27,6 +27,7 @@ import {CSSFeaturesFingerprint} from "../components/css";
 import {GamepadFingerprint} from "../components/gamepad";
 import {VirtualKeyboardFingerprint} from "../components/vkey";
 import {WebCodecsFingerprint} from "../components/webcodecs";
+import {SensorFingerprint} from "../components/sensor";
 
 /**
  * Fingerprint Options
@@ -70,6 +71,32 @@ export class Fingerprint {
                 this.components.set(comp.name, comp);
             }
         }
+    }
+
+    /**
+     * Get component as type by name
+     * @param name {string} component name
+     */
+    public getComponent<T extends FingerprintComponent = FingerprintComponent>(name: string): T | undefined {
+        return this.components.get(name) as T | undefined;
+    }
+
+    /**
+     * Get All Components
+     */
+    public getAllComponents(): FingerprintComponent[] {
+        return Array.from(this.components.values());
+    }
+
+    /**
+     * Get Component Data Typed
+     * @param name {string} component name
+     */
+    public async getComponentDataTyped<T = any>(name: string): Promise<T | undefined> {
+        if (this.components.has(name)) {
+            return await this.getComponentData(name) as Promise<T>;
+        }
+        return undefined;
     }
 
     /**
@@ -200,7 +227,8 @@ export class Fingerprint {
                 new CSSFeaturesFingerprint(),
                 new GamepadFingerprint(),
                 new VirtualKeyboardFingerprint(),
-                new WebCodecsFingerprint()
+                new WebCodecsFingerprint(),
+                new SensorFingerprint()
             ]
         })
     }
