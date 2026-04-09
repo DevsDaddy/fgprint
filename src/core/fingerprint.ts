@@ -22,6 +22,7 @@ import {PerformanceFingerprint} from "../components/performance";
 import {WebGPUFingerprint} from "../components/webgpu";
 import {NetworkFingerprint} from "../components/network";
 import {MathPrecisionFingerprint} from "../components/math";
+import {SpeechSynthesisFingerprint} from "../components/speechsynth";
 
 /**
  * Fingerprint Options
@@ -133,6 +134,23 @@ export class Fingerprint {
     }
 
     /**
+     * Create Basic Fingerprint
+     */
+    public static createBasic() : Fingerprint {
+        return new Fingerprint({
+            components: [
+                new AudioFingerprint(),
+                new CanvasFingerprint(),
+                new FontsFingerprint(),
+                new NavigatorFingerprint(),
+                new PluginsFingerprint(),
+                new ScreenFingerprint(),
+                new WebGPUFingerprint()
+            ]
+        })
+    }
+
+    /**
      * Create Default Fingerprint
      */
     public static createDefault() : Fingerprint {
@@ -153,6 +171,9 @@ export class Fingerprint {
         });
     }
 
+    /**
+     * Create Full Fingerprint
+     */
     public static createFull(): Fingerprint {
         return new Fingerprint({
             components: [
@@ -168,7 +189,8 @@ export class Fingerprint {
                 new PerformanceFingerprint(),
                 new WebGPUFingerprint(),
                 new NetworkFingerprint(),
-                new MathPrecisionFingerprint()
+                new MathPrecisionFingerprint(),
+                new SpeechSynthesisFingerprint()
             ]
         })
     }
