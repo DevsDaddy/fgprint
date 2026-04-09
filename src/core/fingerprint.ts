@@ -21,6 +21,7 @@ import {MiscFingerprint} from "../components/misc";
 import {PerformanceFingerprint} from "../components/performance";
 import {WebGPUFingerprint} from "../components/webgpu";
 import {NetworkFingerprint} from "../components/network";
+import {MathPrecisionFingerprint} from "../components/math";
 
 /**
  * Fingerprint Options
@@ -146,7 +147,8 @@ export class Fingerprint {
                 new TimezoneFingerprint(),
                 new WebGLFingerprint(),
                 new MiscFingerprint(),
-                new WebGPUFingerprint()
+                new WebGPUFingerprint(),
+                new MathPrecisionFingerprint()
             ]
         });
     }
@@ -165,7 +167,8 @@ export class Fingerprint {
                 new MiscFingerprint(),
                 new PerformanceFingerprint(),
                 new WebGPUFingerprint(),
-                new NetworkFingerprint()
+                new NetworkFingerprint(),
+                new MathPrecisionFingerprint()
             ]
         })
     }

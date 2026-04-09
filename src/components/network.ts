@@ -14,7 +14,7 @@ import {FingerprintComponent} from "../core/component";
 export class NetworkFingerprint extends FingerprintComponent {
     name = 'network';
 
-    getData() {
+    public override getData() {
         const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
         if (!conn) return { supported: false };
 
