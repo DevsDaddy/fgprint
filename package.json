@@ -1,0 +1,58 @@
+{
+  "name": "fgprint",
+  "version": "1.0.0",
+  "description": "fgprint - powerful library for fast and stable user fingerprinting based on a variety of parameters, written in TypeScript.",
+  "keywords": [
+    "fingerprint",
+    "typescript",
+    "library",
+    "finger",
+    "print",
+    "user",
+    "detection",
+    "fast",
+    "full",
+    "featured",
+    "zero",
+    "dependency",
+    "modern"
+  ],
+  "homepage": "https://github.com/DevsDaddy/fgprint#readme",
+  "bugs": {
+    "url": "https://github.com/DevsDaddy/fgprint/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevsDaddy/fgprint.git"
+  },
+  "license": "MIT",
+  "author": "Elijah Rastorguev",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build:iife": "tsup src/index.ts --format iife --globalName fgprint --out-dir dist --clean",
+    "build:demo": "npm run build:iife && cp dist/index.global.js demo/lib.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "jsdom": "^23.0.0"
+  },
+  "sideEffects": false
+}

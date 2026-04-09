@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fingerprint Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1><b>Fingerprint (fgprint)</b> Library</h1>
+        <p class="subtitle">Pure TypeScript · Zero dependencies · Extra fast</p>
+    </header>
+
+    <div class="controls">
+        <button id="refreshBtn" class="primary">Refresh Fingerprint</button>
+        <button id="copyHashBtn">Copy Hash</button>
+        <label class="debug-checkbox">
+            <input type="checkbox" id="debugMode"> Debug (show raw data)
+        </label>
+    </div>
+
+    <div class="fingerprint-result">
+        <div class="hash-container">
+            <span class="label">Fingerprint Hash:</span>
+            <code id="fingerprintHash" class="hash-value">Calculating...</code>
+        </div>
+        <div id="syncHashContainer" class="sync-hash">
+            <span class="label">Sync Hash (no audio/media):</span>
+            <code id="syncHash" class="hash-value"></code>
+        </div>
+    </div>
+
+    <div class="components-grid" id="componentsGrid">
+    </div>
+
+    <div class="raw-data-section" id="rawDataSection" style="display: none;">
+        <h3>Raw Data (Debug)</h3>
+        <pre id="rawData"></pre>
+    </div>
+
+    <footer>
+        <span>⚡ Async with timeout · SHA-256 option · Cached results</span>
+    </footer>
+</div>
+
+<script src="lib.js"></script>
+<script src="demo.js"></script>
+</body>
+</html>
