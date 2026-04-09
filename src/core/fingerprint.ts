@@ -23,6 +23,7 @@ import {WebGPUFingerprint} from "../components/webgpu";
 import {NetworkFingerprint} from "../components/network";
 import {MathPrecisionFingerprint} from "../components/math";
 import {SpeechSynthesisFingerprint} from "../components/speechsynth";
+import {CSSFeaturesFingerprint} from "../components/css";
 
 /**
  * Fingerprint Options
@@ -166,7 +167,8 @@ export class Fingerprint {
                 new WebGLFingerprint(),
                 new MiscFingerprint(),
                 new WebGPUFingerprint(),
-                new MathPrecisionFingerprint()
+                new MathPrecisionFingerprint(),
+                new CSSFeaturesFingerprint()
             ]
         });
     }
@@ -190,7 +192,8 @@ export class Fingerprint {
                 new WebGPUFingerprint(),
                 new NetworkFingerprint(),
                 new MathPrecisionFingerprint(),
-                new SpeechSynthesisFingerprint()
+                new SpeechSynthesisFingerprint(),
+                new CSSFeaturesFingerprint()
             ]
         })
     }
