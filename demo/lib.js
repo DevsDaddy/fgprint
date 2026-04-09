@@ -40,6 +40,7 @@ var fgprint = (() => {
     ScreenFingerprint: () => ScreenFingerprint,
     SpeechSynthesisFingerprint: () => SpeechSynthesisFingerprint,
     TimezoneFingerprint: () => TimezoneFingerprint,
+    VirtualKeyboardFingerprint: () => VirtualKeyboardFingerprint,
     WebGLFingerprint: () => WebGLFingerprint,
     WebGPUFingerprint: () => WebGPUFingerprint
   });
@@ -587,6 +588,28 @@ var fgprint = (() => {
     }
   };
 
+  // src/components/vkey.ts
+  var VirtualKeyboardFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "virtualKeyboard";
+    }
+    getData() {
+      const vk = navigator.virtualKeyboard;
+      if (!vk) return { supported: false };
+      return {
+        supported: true,
+        overlaysContent: vk.overlaysContent,
+        boundingRect: vk.boundingRect ? {
+          width: vk.boundingRect.width,
+          height: vk.boundingRect.height,
+          x: vk.boundingRect.x,
+          y: vk.boundingRect.y
+        } : null
+      };
+    }
+  };
+
   // src/core/fingerprint.ts
   var DEFAULT_TIMEOUT = 2e3;
   var Fingerprint = class _Fingerprint {
@@ -724,7 +747,8 @@ var fgprint = (() => {
           new MathPrecisionFingerprint(),
           new SpeechSynthesisFingerprint(),
           new CSSFeaturesFingerprint(),
-          new GamepadFingerprint()
+          new GamepadFingerprint(),
+          new VirtualKeyboardFingerprint()
         ]
       });
     }

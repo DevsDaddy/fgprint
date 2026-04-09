@@ -25,6 +25,7 @@ import {MathPrecisionFingerprint} from "../components/math";
 import {SpeechSynthesisFingerprint} from "../components/speechsynth";
 import {CSSFeaturesFingerprint} from "../components/css";
 import {GamepadFingerprint} from "../components/gamepad";
+import {VirtualKeyboardFingerprint} from "../components/vkey";
 
 /**
  * Fingerprint Options
@@ -195,7 +196,8 @@ export class Fingerprint {
                 new MathPrecisionFingerprint(),
                 new SpeechSynthesisFingerprint(),
                 new CSSFeaturesFingerprint(),
-                new GamepadFingerprint()
+                new GamepadFingerprint(),
+                new VirtualKeyboardFingerprint()
             ]
         })
     }
