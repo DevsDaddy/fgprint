@@ -35,3 +35,4 @@ export * from "./components/speechsynth";
 export * from "./components/webgpu";
 export * from "./components/gamepad";
 export * from "./components/vkey";
+export * from "./components/webcodecs";

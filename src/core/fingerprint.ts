@@ -26,6 +26,7 @@ import {SpeechSynthesisFingerprint} from "../components/speechsynth";
 import {CSSFeaturesFingerprint} from "../components/css";
 import {GamepadFingerprint} from "../components/gamepad";
 import {VirtualKeyboardFingerprint} from "../components/vkey";
+import {WebCodecsFingerprint} from "../components/webcodecs";
 
 /**
  * Fingerprint Options
@@ -170,7 +171,8 @@ export class Fingerprint {
                 new MiscFingerprint(),
                 new WebGPUFingerprint(),
                 new MathPrecisionFingerprint(),
-                new CSSFeaturesFingerprint()
+                new CSSFeaturesFingerprint(),
+                new WebCodecsFingerprint()
             ]
         });
     }
@@ -197,7 +199,8 @@ export class Fingerprint {
                 new SpeechSynthesisFingerprint(),
                 new CSSFeaturesFingerprint(),
                 new GamepadFingerprint(),
-                new VirtualKeyboardFingerprint()
+                new VirtualKeyboardFingerprint(),
+                new WebCodecsFingerprint()
             ]
         })
     }

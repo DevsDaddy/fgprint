@@ -41,6 +41,7 @@ var fgprint = (() => {
     SpeechSynthesisFingerprint: () => SpeechSynthesisFingerprint,
     TimezoneFingerprint: () => TimezoneFingerprint,
     VirtualKeyboardFingerprint: () => VirtualKeyboardFingerprint,
+    WebCodecsFingerprint: () => WebCodecsFingerprint,
     WebGLFingerprint: () => WebGLFingerprint,
     WebGPUFingerprint: () => WebGPUFingerprint
   });
@@ -610,6 +611,41 @@ var fgprint = (() => {
     }
   };
 
+  // src/components/webcodecs.ts
+  var WebCodecsFingerprint = class extends FingerprintComponent {
+    constructor() {
+      super(...arguments);
+      this.name = "webCodecs";
+    }
+    async getData() {
+      if (!("VideoDecoder" in window)) return { supported: false };
+      try {
+        const configs = [
+          { codec: "avc1.42001E", hardwareAcceleration: "prefer-hardware" },
+          { codec: "avc1.640028", hardwareAcceleration: "prefer-hardware" },
+          { codec: "vp8", hardwareAcceleration: "prefer-hardware" },
+          { codec: "vp09.00.10.08", hardwareAcceleration: "prefer-hardware" },
+          { codec: "av01.0.04M.08", hardwareAcceleration: "prefer-hardware" },
+          { codec: "hvc1.1.6.L93.90", hardwareAcceleration: "prefer-hardware" }
+        ];
+        const support = await Promise.all(configs.map(async (cfg) => {
+          try {
+            const support2 = await VideoDecoder.isConfigSupported(cfg);
+            return { codec: cfg.codec, supported: support2.supported, config: support2.config };
+          } catch {
+            return { codec: cfg.codec, supported: false };
+          }
+        }));
+        return {
+          supported: true,
+          videoDecoder: support
+        };
+      } catch {
+        return { supported: false };
+      }
+    }
+  };
+
   // src/core/fingerprint.ts
   var DEFAULT_TIMEOUT = 2e3;
   var Fingerprint = class _Fingerprint {
@@ -722,7 +758,8 @@ var fgprint = (() => {
           new MiscFingerprint(),
           new WebGPUFingerprint(),
           new MathPrecisionFingerprint(),
-          new CSSFeaturesFingerprint()
+          new CSSFeaturesFingerprint(),
+          new WebCodecsFingerprint()
         ]
       });
     }
@@ -748,7 +785,8 @@ var fgprint = (() => {
           new SpeechSynthesisFingerprint(),
           new CSSFeaturesFingerprint(),
           new GamepadFingerprint(),
-          new VirtualKeyboardFingerprint()
+          new VirtualKeyboardFingerprint(),
+          new WebCodecsFingerprint()
         ]
       });
     }
